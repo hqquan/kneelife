@@ -1,6 +1,7 @@
-<?php 
+﻿<?php 
     include "../../admin/config/config.php";
-    
+    // Thiết lập Content Security Policy (CSP)
+    header("Content-Security-Policy: default-src 'self'");
     if ($_POST['action'] === 'editUser' && isset($_POST['userId'])) {
         $userId = $_POST['userId'];
 
@@ -17,10 +18,14 @@
     else if ($_POST['action'] === 'updateUser' && isset($_POST['editUserName'])) {
         
         $userId = $_POST['editUserId'];
+        // encode special chars
+        // $userName = htmlspecialchars($_POST['editUserName']);
+        // $userPhone = htmlspecialchars($_POST['editUserPhone']);
+        // $userEmail = htmlspecialchars($_POST['editUserEmail']);
         $userName = $_POST['editUserName'];
         $userPhone = $_POST['editUserPhone'];
         $userEmail = $_POST['editUserEmail'];
-
+        //
         // Check email
         $sql_user = "SELECT * FROM tbl_user WHERE userEmail = '$userEmail'";
         $query_user = mysqli_query($mysqli, $sql_user);

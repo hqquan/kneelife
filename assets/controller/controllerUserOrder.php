@@ -1,5 +1,8 @@
-<?php 
+﻿<?php 
     include "../../admin/config/config.php";
+
+    // Thiết lập Content Security Policy (CSP)
+    header("Content-Security-Policy: default-src 'self'");
 
     if ($_POST['action'] === 'viewOrderDetail' && isset($_POST['orderId'])) {
         

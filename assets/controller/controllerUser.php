@@ -1,10 +1,21 @@
 <?php 
     include "../../admin/config/config.php";
 
+     //Thêm HTTPOnly cho session cookie
+    ini_set('session.cookie_httponly', true);
+    // Thiết lập Content Security Policy (CSP)
+    header("Content-Security-Policy: default-src 'self'"); 
+
     if ($_POST['action'] === 'submitSignup' && isset($_POST['userEmail'])) {
+         //Sử dụng hàm htmlspecialchars để encode dữ liệu chống XSS attack
+        $userName = htmlspecialchars($_POST['userName']);
+        $userPhone = htmlspecialchars($_POST['userPhone']);
+        $userEmail = htmlspecialchars($_POST['userEmail']);
+        //Không sử dụng htmlspecialchars 
         $userName = $_POST['userName'];
         $userPhone = $_POST['userPhone'];
         $userEmail = $_POST['userEmail'];
+       //
         $userPassword = MD5($_POST['userPassword']);
         $userConfirmPassword = MD5($_POST['userConfirmPassword']);
         $userGroup = 'user';
@@ -91,6 +102,7 @@
             echo 0;
         }
     }
+    //Code không bảo mật XSS
     else if ($_POST['action'] === 'changeInfo' && isset($_POST['userId'])) {
         $userId = $_POST['userId'];
 
@@ -134,7 +146,58 @@
         mysqli_query($mysqli, $sql_updateUser);
         mysqli_query($mysqli, $sql_updateUserInfo);
     }
+    // Code ngăn chặn XSS attack
+    // else if ($_POST['action'] === 'changeInfo' && isset($_POST['userId'])) {
+    //     $userId = $_POST['userId'];
 
+    //     $sql_user = "SELECT u.*, ui.*
+    //                 FROM tbl_user u
+    //                 JOIN tbl_user_info ui ON u.userId = ui.userId
+    //                 WHERE u.userId = ?";
+    //     $stmt = mysqli_prepare($mysqli, $sql_user);
+    //     mysqli_stmt_bind_param($stmt, "i", $userId);
+    //     mysqli_stmt_execute($stmt);
+    //     $result = mysqli_stmt_get_result($stmt);
+    //     $row = mysqli_fetch_assoc($result);
+
+    //     $data = array(
+    //         'userId' => $row['userId'],
+    //         'userInfoId' => $row['userInfoId'],
+    //         'userName' => htmlspecialchars($row['userName']),
+    //         'userPhone' => htmlspecialchars($row['userPhone']),
+    //         'userStreetAddress' => htmlspecialchars($row['userStreetAddress']),
+    //         'userOptional' => htmlspecialchars($row['userOptional']),
+    //         'userCity' => htmlspecialchars($row['userCity']),
+    //     );
+        
+    //     header('Content-Type: application/json');
+    //     echo json_encode($data);
+    // }
+    // else if ($_POST['action'] === 'updateInfo' && isset($_POST['userInfoId'])) {
+    //     $userId = $_POST['userId'];
+    //     $userInfoId = $_POST['userInfoId'];
+    //     //Encode dữ liệu chống XSS attack
+    //     $userName = htmlspecialchars($_POST['userName']);
+    //     $userPhone = htmlspecialchars($_POST['userPhone']);
+    //     $userStreetAddress = htmlspecialchars($_POST['userStreetAddress']);
+    //     $userOptional = htmlspecialchars($_POST['userOptional']);
+    //     $userCity = htmlspecialchars($_POST['userCity']);
+
+    //     $sql_updateUser = "UPDATE tbl_user
+    //                         SET userName=?, userPhone=?
+    //                         WHERE userId=?";
+    //     $stmt = mysqli_prepare($mysqli, $sql_updateUser);
+    //     mysqli_stmt_bind_param($stmt, "ssi", $userName, $userPhone, $userId);
+    //     mysqli_stmt_execute($stmt);
+
+    //     $sql_updateUserInfo = "UPDATE tbl_user_info
+    //                         SET userStreetAddress=?, userOptional=?, userCity=?
+    //                         WHERE userInfoId=?";
+    //     $stmt = mysqli_prepare($mysqli, $sql_updateUserInfo);
+    //     mysqli_stmt_bind_param($stmt, "sssi", $userStreetAddress, $userOptional, $userCity, $userInfoId);
+    //     mysqli_stmt_execute($stmt);
+    // }
+    // //
     if ($_POST['action'] === 'fetchUserInfoData' && isset($_POST['userId'])) {
         $userId = $_POST['userId'];
         $html = "";
